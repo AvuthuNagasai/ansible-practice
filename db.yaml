@@ -1,0 +1,31 @@
+- name: Configure database
+  hosts: db
+  become: yes
+  vars:
+    login_host: db-dev.devopsb73.tech
+  vars_prompt:
+    - name: Login_Password
+      prompt: enter db password
+      private: no
+  tasks:
+
+    - name: install mysql
+      ansible.builtin.dnf:
+        name: mysql-server
+        state: installed
+
+    - name: enable mysql server
+      ansible.builtin.service:
+        name: mysqld
+        enabled: yes
+
+    - name: Start service
+      ansible.builtin.service:
+        name: mysqld
+        state: started
+
+    - name: check DB connection
+      community.mysql.mysql_variables:
+        login_user: root
+        login_password: {{Login_Password}}
+        login_host: {{login_host}}
