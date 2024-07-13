@@ -27,5 +27,5 @@
     - name: check DB connection
       community.mysql.mysql_variables:
         login_user: root
-        login_password: {{Login_Password}}
-        login_host: {{login_host}}
+        login_password: "{{Login_Password}}"
+        login_host: "{{login_host}}"
