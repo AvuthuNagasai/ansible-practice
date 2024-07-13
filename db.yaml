@@ -2,7 +2,7 @@
   hosts: db
   become: yes
   vars:
-    login_host: db-dev.devopsb73.tech
+    login_host: 172.31.89.92
   vars_prompt:
     - name: Login_Password
       prompt: enter db password
