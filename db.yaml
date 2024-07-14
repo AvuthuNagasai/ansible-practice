@@ -1,5 +1,5 @@
 - name: Configure database
-  hosts: db
+  hosts: localhost
   become: yes
   vars:
     login_host: db-dev.devopsb73.tech
