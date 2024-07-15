@@ -3,6 +3,7 @@
   become: yes
   vars:
     login_host: db-dev.devopsb73.tech
+    Login_Password: ExpenseApp@1
   vars_prompt:
     - name: Login_Password
       prompt: enter db password
@@ -23,9 +24,17 @@
       ansible.builtin.service:
         name: mysqld
         state: started
-
+    - name: install python mysql dependencies
+      ansible.builtin.pip:
+        name:
+          - PyMySQL
+          - cryptography
+        executable: pip3.9 # pip3.11 if python version is 3.11
     - name: check DB connection
       community.mysql.mysql_variables:
         login_user: root
         login_password: "{{Login_Password}}"
         login_host: "{{login_host}}"
+        filter: version
+      ignore_errors: yes
+      register: mysql_connection_output
