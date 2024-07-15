@@ -1,38 +1,74 @@
-- name: configure frontend
+#- name: configure frontend
+#  hosts: frontend
+#  become: yes
+#
+#  tasks:
+#    - name: install nginx
+#      ansible.builtin.dnf:
+#        name: nginx
+#        sate: installed
+#
+#    - name: start and enable NGINX
+#      ansible.builtin.service:
+#        name: nginx
+#        state: started
+#        enabled: yes
+#
+#    - name: Remove the default content that web server is serving.
+#      ansible.builtin.file:
+#         path: /usr/share/nginx/html/
+#         state: absent
+#
+#
+#    - name: download and Extract the frontend content.
+#      ansible.builtin.unarchive:
+#        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+#        dest: /usr/share/nginx/html
+#        remote_src: yes
+#
+#    - name: Create Nginx Reverse Proxy Configuration.
+#      ansible.builtin.copy:
+#        src: frontend.service
+#        dest: /etc/nginx/default.d/expense.conf
+#
+#
+#    - name: restart nginx
+#      ansible.builtin.service:
+#        name: nginx
+#        state: restarted
+
+- name: setup frontend
   hosts: frontend
   become: yes
-
   tasks:
-    - name: install nginx
+    - name: install Nginx
       ansible.builtin.dnf:
         name: nginx
-        sate: installed
+        state: installed
 
-    - name: start and enable NGINX
+    - name: start and enable frontend service
       ansible.builtin.service:
         name: nginx
         state: started
         enabled: yes
 
-    - name: Remove the default content that web server is serving.
-      ansible.builtin.file:
-         path: /usr/share/nginx/html/
-         state: absent
+    - name: download frontend code
+      ansible.builtin.get_url:
+        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+        dest: /tmp/frontend.zip
 
-
-    - name: download and Extract the frontend content.
+    - name: unzip frontend code
       ansible.builtin.unarchive:
-        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+        src: /tmp/frontend.zip # by default checks in ansible server
         dest: /usr/share/nginx/html
         remote_src: yes
 
-    - name: Create Nginx Reverse Proxy Configuration.
+    - name: copy backend service
       ansible.builtin.copy:
         src: frontend.service
         dest: /etc/nginx/default.d/expense.conf
 
-
-    - name: restart nginx
+    - name: Restart Nginx Service
       ansible.builtin.service:
         name: nginx
         state: restarted
