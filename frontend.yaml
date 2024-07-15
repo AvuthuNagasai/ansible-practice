@@ -1,5 +1,5 @@
 - name: configure frontend
-  hosts: 172.31.95.186
+  hosts: frontend
   become: yes
 
   tasks:
