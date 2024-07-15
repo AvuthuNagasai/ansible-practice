@@ -1,5 +1,5 @@
 - name: Setting up backend
-  hosts: localhost
+  hosts: backend
   become: yes
   vars:
     login_host: db-dev.devopsb73.tech

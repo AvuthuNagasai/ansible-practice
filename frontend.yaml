@@ -38,7 +38,7 @@
 #        state: restarted
 
 - name: setup frontend
-  hosts: localhost
+  hosts: frontend
   become: yes
   tasks:
     - name: install Nginx
